@@ -1,0 +1,18 @@
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-csi
+spec:
+  clusterSelector: ccm=hello-osc-crs-ccm
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    http://chartmuseum-217-75-161-42.sslip.io 
+    repositoryName:   osc
+    chartName:        osc/osc-bsu-csi-driver
+    chartVersion:     v1.2.0
+    releaseName:      osc-bsu-csi-driver
+    releaseNamespace: kube-system
+    helmChartAction:  Install
+    secretRef:
+      name: osc-csi-bsu
+      namespace: kube-system

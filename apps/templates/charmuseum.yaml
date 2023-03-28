@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: chartmuseum
+  namespace: default
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  project: default
+  source:
+    chart: chartmuseum
+    repoURL: https://chartmuseum.github.io/charts
+    targetRevision: 3.9.3
+    helm: 
+      values: |
+        env: 
+          open:
+            DISABLE_API: false     
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

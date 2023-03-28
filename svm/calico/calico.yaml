@@ -1,0 +1,23 @@
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-calico
+spec:
+  clusterSelector: ccm=hello-osc-crs-ccm
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    https://projectcalico.docs.tigera.io/charts
+    repositoryName:   projectcalico
+    chartName:        projectcalico/tigera-operator
+    chartVersion:     v3.24.5
+    releaseName:      calico
+    releaseNamespace: tigera-operator
+    helmChartAction:  Install
+    values: |
+      installation:
+        calicoNetwork:
+          ipPools:
+          {{ range $cidr := .Cluster.Spec.ClusterNetwork.Pods.CIDRBlocks }}
+            - cidr: {{ $cidr }}
+              encapsulation: VXLAN
+          {{ end }}

@@ -1,0 +1,19 @@
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-ccm
+spec:
+  clusterSelector: ccm=hello-osc-crs-ccm
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    http://chartmuseum-217-75-161-42.sslip.io 
+    repositoryName:   osc
+    chartName:        osc/osc-cloud-controller-manager
+    chartVersion:     v0.2.0
+    releaseName:      osc-cloud-controller-manager
+    releaseNamespace: kube-system
+    helmChartAction:  Install
+  policyRefs:
+  - name: osc-secret  
+    namespace: kube-system
+    kind: Secret
